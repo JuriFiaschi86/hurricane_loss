@@ -22,6 +22,29 @@ parser.add_argument("-n", "--num_monte_carlo_samples", type=int, default=10000, 
 args = parser.parse_args()
 
 
+### Check input consistency ###
+if (args.florida_landfall_rate < 0):
+    print("florida_landfall_rate must be >= 0. Exit.")
+    exit()
+if (args.florida_mean < 0):
+    print("florida_mean must be >= 0. Exit.")
+    exit()
+if (args.florida_stddev < 0):
+    print("florida_stddev must be >= 0. Exit.")
+    exit()
+if (args.gulf_landfall_rate < 0):
+    print("gulf_landfall_rate must be >= 0. Exit.")
+    exit()
+if (args.gulf_mean < 0):
+    print("gulf_mean must be >= 0. Exit.")
+    exit()
+if (args.gulf_stddev < 0):
+    print("gulf_stddev must be >= 0. Exit.")
+    exit()
+if (args.num_monte_carlo_samples <= 0):
+    print("florida_landfall_rate must be an integer > 0. Exit.")
+    exit()
+
 
 ##################
 ### SIMULATION ###
