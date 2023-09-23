@@ -13,6 +13,9 @@ The script requires the entry of the following parameters in the specific order:
 * Standard deviation of Gulf states economic loss (standard deviation of LogNormal distribution) = gulf_stddev
 * Years of simulations (number of MonteCarlo samples) = num_monte_carlo_samples, n [optional, default = 10000]
 
+The code first performs a consistency check, requiring all input parameters to be positive, and the number of simulated years a positive integer.
+
+
 ### Usage
 
     $ gethurricaneloss [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
