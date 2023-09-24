@@ -19,11 +19,35 @@ The code first performs a consistency check, requiring all input parameters to b
 ### Usage
 
     $ gethurricaneloss [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
+    $ gethurricaneloss_multicores [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
+    $ gethurricaneloss_numba [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
     
 Example
 
     $ gethurricaneloss 0.5 0.1 0.3 0.4 0.2 0.7 -n 10000000
+    $ gethurricaneloss_multicores 0.5 0.1 0.3 0.4 0.2 0.7 -n 10000000
+    $ gethurricaneloss_numba 0.5 0.1 0.3 0.4 0.2 0.7 -n 10000000
 
 For help, see also
 
     $ gethurricaneloss -h
+    $ gethurricaneloss_multicores -h
+    $ gethurricaneloss_numba -h
+    
+    
+### Performances
+
+The scripts gethurricaneloss_multicores and gethurricaneloss_numba are optimised using the multiprocessing and numba python packages.
+
+Speed test on local machine (8 cores):
+
+with 10^7 Monte Carlo simulations:
+* gethurricaneloss: Runtime 22.660911083221436 seconds.
+* gethurricaneloss_multicores: Runtime 7.916680812835693 seconds.
+* gethurricaneloss_numba: Runtime 1.642557144165039 seconds.
+
+with 10^8 Monte Carlo simulations:
+* gethurricaneloss: Runtime 309.77609276771545 seconds.
+* gethurricaneloss_multicores: Runtime 171.1051468849182 seconds.
+* gethurricaneloss_numba: Runtime 10.642749547958374 seconds.
+
