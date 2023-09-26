@@ -54,14 +54,14 @@ if (args.num_monte_carlo_samples <= 0):
 def mean_loss_numba(florida_landfall_rate, florida_mean, florida_stddev, gulf_landfall_rate, gulf_mean, gulf_stddev, num_monte_carlo_samples):
 
     ### Vectorise hurricane events in Florida in simulated years
-    events_florida = np.random.poisson(florida_landfall_rate, num_monte_carlo_samples)
+    events_florida = np.random.poisson(florida_landfall_rate, num_monte_carlo_samples).sum()
     ### Vectorise and sum random loss for each hurricane events in Florida in simulated years
-    florida_losses = np.random.lognormal(florida_mean, florida_stddev, events_florida.sum()).sum()
+    florida_losses = np.random.lognormal(florida_mean, florida_stddev, events_florida).sum()
 
     ### Vectorise hurricane events in Gulf state in simulated years
-    events_gulf = np.random.poisson(gulf_landfall_rate, num_monte_carlo_samples)
+    events_gulf = np.random.poisson(gulf_landfall_rate, num_monte_carlo_samples).sum()
     ### Vectorise and sum random loss for each hurricane events in Gulf states in simulated years
-    gulf_losses = np.random.lognormal(gulf_mean, gulf_stddev, events_gulf.sum()).sum()
+    gulf_losses = np.random.lognormal(gulf_mean, gulf_stddev, events_gulf).sum()
 
     ### Mean loss over simulated years
     mean_loss = (florida_losses + gulf_losses) / num_monte_carlo_samples

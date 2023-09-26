@@ -21,28 +21,31 @@ The code first performs a consistency check, requiring all input parameters to b
     $ gethurricaneloss.py [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
     $ gethurricaneloss_multicores.py [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
     $ gethurricaneloss_numba.py [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
+    $ gethurricaneloss_dask.py [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
     
 Example
 
     $ gethurricaneloss.py 3 5 2 2 3 1 -n 100000
     $ gethurricaneloss_multicores.py 3 5 2 2 3 1 -n 100000
     $ gethurricaneloss_numba.py 3 5 2 2 3 1 -n 100000
+    $ gethurricaneloss_dask.py 3 5 2 2 3 1 -n 100000
 
 For help, see also
 
     $ gethurricaneloss.py -h
     $ gethurricaneloss_multicores.py -h
     $ gethurricaneloss_numba.py -h
+    $ gethurricaneloss_dask.py -h
     
 ### Test
-A pytest script is provided, checking the behaviour of the code for valid and invalid input parameters (9 test on each of the the 3 scripts: 27 tests total)
+A pytest script is provided, checking the behaviour of the code for valid and invalid input parameters (9 test on each of the the 4 scripts: 36 tests total). Estimated test time 15 - 20 sec.
 
     $ pytest pytest_gethurricaneloss.py
 
 
 ### Performances
 
-The scripts gethurricaneloss_multicores and gethurricaneloss_numba are optimised using the multiprocessing and numba python packages.
+The scripts gethurricaneloss_multicores, gethurricaneloss_numba and gethurricaneloss_dask are optimised using the multiprocessing, numba and dask python packages.
 Speed test on local machine (Intel® Core™ i7-8565U CPU @ 1.80GHz × 8):
 
 Benchmark point parameters:
@@ -57,24 +60,31 @@ with 10^4 Monte Carlo simulations:
 * gethurricaneloss: Runtime 0.008306026458740234 seconds.
 * gethurricaneloss_multicores: Runtime 0.04959893226623535 seconds.
 * gethurricaneloss_numba: Runtime 1.0626742839813232 seconds.
+* gethurricaneloss_dask: Runtime 0.012112140655517578 seconds.
 
 with 10^5 Monte Carlo simulations:
 * gethurricaneloss: Runtime 0.02667689323425293 seconds.
 * gethurricaneloss_multicores: Runtime 0.2878227233886719 seconds.
 * gethurricaneloss_numba: Runtime 1.0819246768951416 seconds.
+* gethurricaneloss_dask: Runtime 0.03550601005554199 seconds.
 
 with 10^6 Monte Carlo simulations:
 * gethurricaneloss: Runtime 0.24503302574157715 seconds.
 * gethurricaneloss_multicores: Runtime 2.8667149543762207 seconds.
 * gethurricaneloss_numba: Runtime 1.3535361289978027 seconds.
+* gethurricaneloss_dask: Runtime 0.25510287284851074 seconds.
 
 with 10^7 Monte Carlo simulations:
 * gethurricaneloss: Runtime 2.4415886402130127 seconds.
 * gethurricaneloss_multicores: Runtime 58.561392307281494 seconds.
 * gethurricaneloss_numba: Runtime 4.1608922481536865 seconds.
+* gethurricaneloss_dask: Runtime 1.9315111637115479 seconds.
 
 with 10^8 Monte Carlo simulations:
 * gethurricaneloss: Runtime 41.176252365112305 seconds.
 * gethurricaneloss_multicores: Runtime --- seconds.
 * gethurricaneloss_numba: Runtime 37.619906187057495 seconds.
+* gethurricaneloss_dask: Runtime 6.700688123703003 seconds.
 
+with 10^9 Monte Carlo simulations:
+* gethurricaneloss_dask: Runtime 90.97569131851196 seconds.

@@ -2,6 +2,7 @@
 
 import argparse
 import numpy as np
+import dask.array as da
 from time import time
 
 #############
@@ -10,7 +11,7 @@ from time import time
 
 ### Input from parsing
 ### -h for help and description
-parser = argparse.ArgumentParser(description="Python code to calculate the average annual hurricane loss in Florida and in Gulf states.")
+parser = argparse.ArgumentParser(description="Python code to calculate the average annual hurricane loss in Florida and in Gulf states. The script is optimised employing dask.")
 parser.add_argument("florida_landfall_rate", type=float, help="Annual hurricane rate in Florida (Poisson)")
 parser.add_argument("florida_mean", type=float, help="Mean of Florida economic loss (LogNormal)")
 parser.add_argument("florida_stddev", type=float, help="Standard deviation of Florida economic loss (LogNormal)")
@@ -50,21 +51,25 @@ if (args.num_monte_carlo_samples <= 0):
 ### SIMULATION ###
 ##################
 
+def mean_loss_dask(args):
+    ### Total hurricane events in Florida in simulated years
+    florida_hurricane_events = da.random.poisson(args.florida_landfall_rate, args.num_monte_carlo_samples).sum().compute()
+    ### Total random loss for hurricane events in Florida in simulated years
+    florida_losses = da.random.lognormal(args.florida_mean, args.florida_stddev, florida_hurricane_events).sum().compute()
+    
+    ### Total hurricane events in Gulf states in simulated years
+    gulf_hurricane_events = da.random.poisson(args.gulf_landfall_rate, args.num_monte_carlo_samples).sum().compute()
+    ### Total random loss for hurricane events in Gulf states in simulated years
+    gulf_losses = da.random.lognormal(args.gulf_mean, args.gulf_stddev, gulf_hurricane_events).sum().compute()
+    
+    ### Mean loss over simulated years
+    mean_loss = (florida_losses + gulf_losses) / args.num_monte_carlo_samples
+
+    return mean_loss
+
+
 start = time()
-
-### Vectorise hurricane events in Florida in simulated years
-events_florida = np.random.poisson(args.florida_landfall_rate, args.num_monte_carlo_samples).sum()
-### Vectorise and sum random loss for each hurricane events in Florida in simulated years
-florida_losses = np.random.lognormal(args.florida_mean, args.florida_stddev, events_florida).sum()
-
-### Vectorise hurricane events in Gulf state in simulated years
-events_gulf = np.random.poisson(args.gulf_landfall_rate, args.num_monte_carlo_samples).sum()
-### Vectorise and sum random loss for each hurricane events in Gulf states in simulated years
-gulf_losses = np.random.lognormal(args.gulf_mean, args.gulf_stddev, events_gulf).sum()
-
-### Mean loss over simulated years
-mean_loss = (florida_losses + gulf_losses) / args.num_monte_carlo_samples
-
+mean_loss = mean_loss_dask(args)
 end = time()
 
 
@@ -99,10 +104,10 @@ log_data = {
 
 ### Save always to a new file
 n = 0
-log_file = current_dir + "run_numpy_" + str(n) + ".json"
+log_file = current_dir + "run_dusk_" + str(n) + ".json"
 while (os.path.exists(log_file)):
     n+=1
-    log_file = current_dir + "run_numpy_" + str(n) + ".json"
+    log_file = current_dir + "run_dusk_" + str(n) + ".json"
 ### Saving in JSON format
 with open(log_file, "w") as file_object:
     json.dump(log_data, file_object)
