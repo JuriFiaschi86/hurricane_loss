@@ -66,7 +66,6 @@ results = pool.map(year_loss, [args] * args.num_monte_carlo_samples)
 total_loss = sum(results)
 mean_loss = total_loss / args.num_monte_carlo_samples
 
-# Close and join the pool
 pool.close()
 pool.join()
 

@@ -9,15 +9,14 @@ benchmark_valid = {
     "gulf_landfall_rate": 2,
     "gulf_mean": 3,
     "gulf_stddev": 1,
-    "num_monte_carlo_samples": 100000,
-    "mean_loss": 3359.37 # from 
-    # "runtime": 9.781132936477661
+    "num_monte_carlo_samples": 100000, # default MonteCarlo samples for test 10^6
+    "mean_loss": 3358.05540 # from MonteCarlo samples 10^9 numba simulation
 }
 
 tolerance = 1e-1
-# tolerance = 1e-3
+#tolerance = 1e-3
 
-def to_run(benchmark, script):
+def command_to_run(benchmark, script):
     return "python3 " + script + " " + str(benchmark["florida_landfall_rate"]) + " " + str(benchmark["florida_mean"]) + " " + str(benchmark["florida_stddev"]) + " " + str(benchmark["gulf_landfall_rate"]) + " " + str(benchmark["gulf_mean"]) + " " + str(benchmark["gulf_stddev"]) + " -n " + str(benchmark["num_monte_carlo_samples"])
 
 
@@ -29,7 +28,7 @@ script = "gethurricaneloss.py"
 
 ### Test valid input. Check result and tolerance
 def test_numpy_valid():
-    command = to_run(benchmark_valid, script)
+    command = command_to_run(benchmark_valid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     output_test = float((out.split())[4])
@@ -41,7 +40,7 @@ def test_numpy_valid():
 def test_numpy_invalid_input_florida_landfall_rate():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["florida_landfall_rate"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_landfall_rate must be >= 0. Exit." in out
@@ -49,7 +48,7 @@ def test_numpy_invalid_input_florida_landfall_rate():
 def test_numpy_invalid_input_florida_mean():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["florida_mean"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_mean must be >= 0. Exit." in out
@@ -57,7 +56,7 @@ def test_numpy_invalid_input_florida_mean():
 def test_numpy_invalid_input_florida_stddev():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["florida_stddev"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_stddev must be >= 0. Exit." in out
@@ -66,7 +65,7 @@ def test_numpy_invalid_input_florida_stddev():
 def test_numpy_invalid_input_gulf_landfall_rate():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["gulf_landfall_rate"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "gulf_landfall_rate must be >= 0. Exit." in out
@@ -74,7 +73,7 @@ def test_numpy_invalid_input_gulf_landfall_rate():
 def test_numpy_invalid_input_gulf_mean():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["gulf_mean"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "gulf_mean must be >= 0. Exit." in out
@@ -82,7 +81,7 @@ def test_numpy_invalid_input_gulf_mean():
 def test_numpy_invalid_input_gulf_stddev():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["gulf_stddev"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "gulf_stddev must be >= 0. Exit." in out
@@ -91,7 +90,7 @@ def test_numpy_invalid_input_gulf_stddev():
 def test_numpy_invalid_input_num_monte_carlo_samples_integer():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["num_monte_carlo_samples"] = 0.5
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
     _, err = process.communicate()
     assert "error: argument -n/--num_monte_carlo_samples:" in err
@@ -99,7 +98,7 @@ def test_numpy_invalid_input_num_monte_carlo_samples_integer():
 def test_numpy_invalid_input_num_monte_carlo_samples_positive():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["num_monte_carlo_samples"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_landfall_rate must be an integer > 0. Exit." in out
@@ -117,7 +116,7 @@ script = "gethurricaneloss_multicores.py"
 
 ### Test valid input. Check result and tolerance
 def test_multicore_valid():
-    command = to_run(benchmark_valid, script)
+    command = command_to_run(benchmark_valid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     output_test = float((out.split())[4])
@@ -129,7 +128,7 @@ def test_multicore_valid():
 def test_multicore_invalid_input_florida_landfall_rate():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["florida_landfall_rate"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_landfall_rate must be >= 0. Exit." in out
@@ -137,7 +136,7 @@ def test_multicore_invalid_input_florida_landfall_rate():
 def test_multicore_invalid_input_florida_mean():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["florida_mean"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_mean must be >= 0. Exit." in out
@@ -145,7 +144,7 @@ def test_multicore_invalid_input_florida_mean():
 def test_multicore_invalid_input_florida_stddev():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["florida_stddev"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_stddev must be >= 0. Exit." in out
@@ -154,7 +153,7 @@ def test_multicore_invalid_input_florida_stddev():
 def test_multicore_invalid_input_gulf_landfall_rate():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["gulf_landfall_rate"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "gulf_landfall_rate must be >= 0. Exit." in out
@@ -162,7 +161,7 @@ def test_multicore_invalid_input_gulf_landfall_rate():
 def test_multicore_invalid_input_gulf_mean():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["gulf_mean"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "gulf_mean must be >= 0. Exit." in out
@@ -170,7 +169,7 @@ def test_multicore_invalid_input_gulf_mean():
 def test_multicore_invalid_input_gulf_stddev():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["gulf_stddev"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "gulf_stddev must be >= 0. Exit." in out
@@ -179,7 +178,7 @@ def test_multicore_invalid_input_gulf_stddev():
 def test_multicore_invalid_input_num_monte_carlo_samples_integer():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["num_monte_carlo_samples"] = 0.5
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
     _, err = process.communicate()
     assert "error: argument -n/--num_monte_carlo_samples:" in err
@@ -187,7 +186,7 @@ def test_multicore_invalid_input_num_monte_carlo_samples_integer():
 def test_multicore_invalid_input_num_monte_carlo_samples_positive():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["num_monte_carlo_samples"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_landfall_rate must be an integer > 0. Exit." in out
@@ -203,7 +202,7 @@ script = "gethurricaneloss_numba.py"
 
 ### Test valid input. Check result and tolerance
 def test_numba_valid():
-    command = to_run(benchmark_valid, script)
+    command = command_to_run(benchmark_valid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     output_test = float((out.split())[4])
@@ -215,7 +214,7 @@ def test_numba_valid():
 def test_numba_invalid_input_florida_landfall_rate():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["florida_landfall_rate"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_landfall_rate must be >= 0. Exit." in out
@@ -223,7 +222,7 @@ def test_numba_invalid_input_florida_landfall_rate():
 def test_numba_invalid_input_florida_mean():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["florida_mean"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_mean must be >= 0. Exit." in out
@@ -231,7 +230,7 @@ def test_numba_invalid_input_florida_mean():
 def test_numba_invalid_input_florida_stddev():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["florida_stddev"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_stddev must be >= 0. Exit." in out
@@ -240,7 +239,7 @@ def test_numba_invalid_input_florida_stddev():
 def test_numba_invalid_input_gulf_landfall_rate():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["gulf_landfall_rate"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "gulf_landfall_rate must be >= 0. Exit." in out
@@ -248,7 +247,7 @@ def test_numba_invalid_input_gulf_landfall_rate():
 def test_numba_invalid_input_gulf_mean():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["gulf_mean"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "gulf_mean must be >= 0. Exit." in out
@@ -256,7 +255,7 @@ def test_numba_invalid_input_gulf_mean():
 def test_numba_invalid_input_gulf_stddev():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["gulf_stddev"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "gulf_stddev must be >= 0. Exit." in out
@@ -265,7 +264,7 @@ def test_numba_invalid_input_gulf_stddev():
 def test_numba_invalid_input_num_monte_carlo_samples_integer():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["num_monte_carlo_samples"] = 0.5
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, shell=True)
     _, err = process.communicate()
     assert "error: argument -n/--num_monte_carlo_samples:" in err
@@ -273,7 +272,7 @@ def test_numba_invalid_input_num_monte_carlo_samples_integer():
 def test_numba_invalid_input_num_monte_carlo_samples_positive():
     benchmark_invalid = benchmark_valid.copy()
     benchmark_invalid["num_monte_carlo_samples"] = -1
-    command = to_run(benchmark_invalid, script)
+    command = command_to_run(benchmark_invalid, script)
     process = subprocess.Popen(command, stdout=subprocess.PIPE, universal_newlines=True, shell=True)
     out, _ = process.communicate()
     assert "florida_landfall_rate must be an integer > 0. Exit." in out

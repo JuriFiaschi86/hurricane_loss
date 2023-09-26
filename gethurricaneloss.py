@@ -63,8 +63,8 @@ events_gulf = np.random.poisson(args.gulf_landfall_rate, args.num_monte_carlo_sa
 gulf_losses = np.random.lognormal(args.gulf_mean, args.gulf_stddev, events_gulf.sum()).sum()
 
 ### Mean loss over simulated years
-# mean_loss = (florida_losses.sum() + gulf_losses.sum()) / args.num_monte_carlo_samples
 mean_loss = (florida_losses + gulf_losses) / args.num_monte_carlo_samples
+
 end = time()
 
 
