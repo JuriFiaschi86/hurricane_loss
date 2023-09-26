@@ -70,13 +70,43 @@ mean_loss = total_loss / args.num_monte_carlo_samples
 pool.close()
 pool.join()
 
+end = time()
 
-#############
-## OUTPUT ###
-#############
+##############
+### OUTPUT ###
+##############
 
 ### Print the result
-print(f"Mean annual loss: ${mean_loss:.2f} Billion")
-
-end = time()
+print(f"Mean annual loss: $ {mean_loss:.5f} Billions")
 print(f"Computed in {(end - start)} seconds.")
+
+#################
+### SAVE DATA ###
+#################
+
+import json
+import os
+
+current_dir = os.getcwd() + "/"
+
+log_data = {
+    "florida_landfall_rate": args.florida_landfall_rate,
+    "florida_mean": args.florida_mean,
+    "florida_stddev": args.florida_stddev,
+    "gulf_landfall_rate": args.gulf_landfall_rate,
+    "gulf_mean": args.gulf_mean,
+    "gulf_stddev": args.gulf_stddev,
+    "num_monte_carlo_samples": args.num_monte_carlo_samples,
+    "mean_loss": mean_loss,
+    "runtime": (end - start)
+}
+
+### Save always to a new file
+n = 0
+log_file = current_dir + "run_multicore_" + str(n) + ".json"
+while (os.path.exists(log_file)):
+    n+=1
+    log_file = current_dir + "run_" + str(n) + ".json"
+### Saving in JSON format
+with open(log_file, "w") as file_object:
+    json.dump(log_data, file_object)
