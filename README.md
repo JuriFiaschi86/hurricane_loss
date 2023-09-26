@@ -72,3 +72,6 @@ with 10^8 Monte Carlo simulations:
 * gethurricaneloss: Runtime 726.0821187496185 seconds.
 * gethurricaneloss_multicores: Runtime 355.67957615852356 seconds.
 * gethurricaneloss_numba: Runtime 34.81420302391052 seconds.
+
+with 10^9 Monte Carlo simulations:
+* gethurricaneloss_numba: Runtime 352.9503734111786 seconds.
