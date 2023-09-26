@@ -102,7 +102,7 @@ n = 0
 log_file = current_dir + "run_numpy_" + str(n) + ".json"
 while (os.path.exists(log_file)):
     n+=1
-    log_file = current_dir + "run_" + str(n) + ".json"
+    log_file = current_dir + "run_numpy_" + str(n) + ".json"
 ### Saving in JSON format
 with open(log_file, "w") as file_object:
     json.dump(log_data, file_object)
