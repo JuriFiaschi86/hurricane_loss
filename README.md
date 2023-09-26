@@ -18,28 +18,55 @@ The code first performs a consistency check, requiring all input parameters to b
 
 ### Usage
 
-    $ gethurricaneloss [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
-    $ gethurricaneloss_multicores [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
-    $ gethurricaneloss_numba [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
+    $ gethurricaneloss.py [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
+    $ gethurricaneloss_multicores.py [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
+    $ gethurricaneloss_numba.py [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev
     
 Example
 
-    $ gethurricaneloss 0.5 0.1 0.3 0.4 0.2 0.7 -n 10000000
-    $ gethurricaneloss_multicores 0.5 0.1 0.3 0.4 0.2 0.7 -n 10000000
-    $ gethurricaneloss_numba 0.5 0.1 0.3 0.4 0.2 0.7 -n 10000000
+    $ gethurricaneloss.py 3 5 2 2 3 1 -n 100000
+    $ gethurricaneloss_multicores.py 3 5 2 2 3 1 -n 100000
+    $ gethurricaneloss_numba.py 3 5 2 2 3 1 -n 100000
 
 For help, see also
 
-    $ gethurricaneloss -h
-    $ gethurricaneloss_multicores -h
-    $ gethurricaneloss_numba -h
+    $ gethurricaneloss.py -h
+    $ gethurricaneloss_multicores.py -h
+    $ gethurricaneloss_numba.py -h
     
-    
+### Test
+A pytest script is provided, checking the behaviour of the code for valid and invalid input parameters (9 test on each of the the 3 scripts: 27 tests total)
+
+    $ pytest pytest_gethurricaneloss.py
+
+
 ### Performances
 
 The scripts gethurricaneloss_multicores and gethurricaneloss_numba are optimised using the multiprocessing and numba python packages.
-
 Speed test on local machine (8 cores):
+
+Benchmark point parameters:
+"florida_landfall_rate": 3,
+"florida_mean": 5,
+"florida_stddev": 2,
+"gulf_landfall_rate": 2,
+"gulf_mean": 3,
+"gulf_stddev": 1
+
+with 10^4 Monte Carlo simulations:
+* gethurricaneloss: Runtime 22.660911083221436 seconds.
+* gethurricaneloss_multicores: Runtime 7.916680812835693 seconds.
+* gethurricaneloss_numba: Runtime 1.642557144165039 seconds.
+
+with 10^5 Monte Carlo simulations:
+* gethurricaneloss: Runtime 22.660911083221436 seconds.
+* gethurricaneloss_multicores: Runtime 7.916680812835693 seconds.
+* gethurricaneloss_numba: Runtime 1.642557144165039 seconds.
+
+with 10^6 Monte Carlo simulations:
+* gethurricaneloss: Runtime 22.660911083221436 seconds.
+* gethurricaneloss_multicores: Runtime 7.916680812835693 seconds.
+* gethurricaneloss_numba: Runtime 1.642557144165039 seconds.
 
 with 10^7 Monte Carlo simulations:
 * gethurricaneloss: Runtime 22.660911083221436 seconds.
