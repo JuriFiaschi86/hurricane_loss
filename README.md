@@ -38,16 +38,37 @@ For help, see also
 ### Performances
 
 The scripts gethurricaneloss_multicores and gethurricaneloss_numba are optimised using the multiprocessing and numba python packages.
+Speed test on local machine (Intel® Core™ i7-8565U CPU @ 1.80GHz × 8):
 
-Speed test on local machine (8 cores):
+Benchmark point parameters:
+"florida_landfall_rate": 3,
+"florida_mean": 5,
+"florida_stddev": 2,
+"gulf_landfall_rate": 2,
+"gulf_mean": 3,
+"gulf_stddev": 1
+
+with 10^4 Monte Carlo simulations:
+* gethurricaneloss: Runtime 0.050960540771484375 seconds.
+* gethurricaneloss_multicores: Runtime 0.03963303565979004 seconds.
+* gethurricaneloss_numba: Runtime 0.9022736549377441 seconds.
+
+with 10^5 Monte Carlo simulations:
+* gethurricaneloss: Runtime 0.490692138671875 seconds.
+* gethurricaneloss_multicores: Runtime 0.18401741981506348 seconds.
+* gethurricaneloss_numba: Runtime 0.6957817077636719 seconds.
+
+with 10^6 Monte Carlo simulations:
+* gethurricaneloss: Runtime 5.221672058105469 seconds.
+* gethurricaneloss_multicores: Runtime 1.699613332748413 seconds.
+* gethurricaneloss_numba: Runtime 0.9563498497009277 seconds.
 
 with 10^7 Monte Carlo simulations:
-* gethurricaneloss: Runtime 22.660911083221436 seconds.
-* gethurricaneloss_multicores: Runtime 7.916680812835693 seconds.
-* gethurricaneloss_numba: Runtime 1.642557144165039 seconds.
+* gethurricaneloss: Runtime 50.14009714126587 seconds.
+* gethurricaneloss_multicores: Runtime 30.176668882369995 seconds.
+* gethurricaneloss_numba: Runtime 3.4051709175109863 seconds.
 
 with 10^8 Monte Carlo simulations:
-* gethurricaneloss: Runtime 309.77609276771545 seconds.
-* gethurricaneloss_multicores: Runtime 171.1051468849182 seconds.
-* gethurricaneloss_numba: Runtime 10.642749547958374 seconds.
-
+* gethurricaneloss: Runtime 726.0821187496185 seconds.
+* gethurricaneloss_multicores: Runtime 355.67957615852356 seconds.
+* gethurricaneloss_numba: Runtime 34.81420302391052 seconds.
